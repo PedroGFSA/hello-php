@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS clientes (
+  id UUID DEFAULT uuid() PRIMARY KEY,
+  nome VARCHAR(255) NOT NULL,
+  telefone VARCHAR(30) NOT NULL UNIQUE,
+  data_de_nascimento DATE NOT NULL,
+  email VARCHAR(255),
+  cpf VARCHAR(11) UNIQUE
+);
