@@ -15,7 +15,7 @@
     <button class="btn btn-success mb-3"><a class="link-underline link-underline-opacity-0 link-light" href="lista-clientes.php">Ver lista de clientes</a></button>
   </div>
 
-  <form class="form-control  form-control-sm d-flex flex-column gap-3 py-3" style="margin: 0 auto; max-width: 800px" action="lista-clientes.php" method="POST">
+  <form class="form-control form-control-sm d-flex flex-column gap-3 py-3" style="margin: 0 auto; max-width: 800px" action="lista-clientes.php" method="POST">
 
     <div class="form-group">
       <label class="form-label" for="nome">Nome <span class="text-danger">*</span></label>

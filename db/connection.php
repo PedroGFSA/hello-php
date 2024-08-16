@@ -21,7 +21,7 @@ function migrate($conn)
         $create_clientes_table = file_get_contents("./migrations/001__create_clientes_table.sql");
         mysqli_query($conn, "$create_clientes_table");
     } catch (Exception $e) {
-        echo $e;
+        // echo $e;
     }
 }
 ?>

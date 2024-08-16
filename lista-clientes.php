@@ -4,12 +4,14 @@ require('db/queries.php');
 require('db/connection.php');
 require('utils/validation.php');
 
+$error = "";
+
 if (isset($_POST['submit'])) {
   try {
-    validateInputs($conn, $_POST['nome'], $_POST['telefone'], $_POST['cpf']);
+    validateInputs($conn, $_POST['nome'], $_POST['data_de_nascimento'], $_POST['telefone'], $_POST['cpf']);
     create($conn, $_POST['nome'], $_POST['telefone'], $_POST['data_de_nascimento'], $_POST['email'], $_POST['cpf']);
   } catch (Exception $e) {
-    echo $e;
+    $error = $e->getMessage();
   }
 }
 
@@ -44,20 +46,18 @@ function showClientes($clientes)
           <th>CPF</th>  
         </tr>";
   foreach ($clientes as $cliente) {
-    $cliente->cpf = $cliente->cpf ? formatCpf($cliente->cpf) : '-';
-    $cliente->email = $cliente->email ? "<a href=''>$cliente->email</a>" : '-';
+    $cpf = $cliente->cpf ? formatCpf($cliente->cpf) : '-';
+    $email = $cliente->email ? "<a href=''>$cliente->email</a>" : '-';
     $idade = calculateAge($cliente->data_de_nascimento);
     echo "<tr>
-            <th>$cliente->nome</th>  
-            <th>$cliente->telefone</th>  
-            <th>$idade anos</th>  
-            <th>$cliente->email</th>  
-            <th>$cliente->cpf</th>  
+            <td>$cliente->nome</td>  
+            <td>$cliente->telefone</td>  
+            <td>$idade anos</td>  
+            <td>$email</td>  
+            <td>$cpf</td>  
           </tr>";
   }
 }
-
-
 
 ?>
 
@@ -72,6 +72,13 @@ function showClientes($clientes)
 </head>
 
 <body class="pb-5">
+  <script>
+    console.log("hello world");
+    
+    if (<?php echo (empty($error) ? 'false' : 'true') ?>) {
+      window.alert("Aconteceu um erro no cadastro\n" + "<?php echo "$error" ?>");
+    }
+  </script>
   <h2 class="text-center mt-3 mb-3">Lista de Clientes</h2>
   <form class="mb-4 text-center" action="index.php">
     <input class="btn btn-success" type="submit" value="Cadastrar novo cliente">
