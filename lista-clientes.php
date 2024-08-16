@@ -23,10 +23,12 @@ function formatCpf($cpf)
   return $cpf;
 }
 
-function formatDate($date)
+function calculateAge($date)
 {
-  $date = implode('/', array_reverse(explode('-', $date)));
-  return $date;
+  $current = new DateTime("now");
+  $parsedDate = DateTimeImmutable::createFromFormat('Y-m-d', $date);
+  $result = date_diff($current, $parsedDate);
+  return $result->y;
 }
 
 $clientes = getAll($conn);
@@ -37,18 +39,18 @@ function showClientes($clientes)
   echo "<tr>
           <th>Nome</th>  
           <th>Telefone</th>  
-          <th>Data de nascimento</th>  
+          <th>Idade</th>  
           <th>Email</th>  
           <th>CPF</th>  
         </tr>";
   foreach ($clientes as $cliente) {
     $cliente->cpf = $cliente->cpf ? formatCpf($cliente->cpf) : '-';
     $cliente->email = $cliente->email ? "<a href=''>$cliente->email</a>" : '-';
-    $cliente->data_de_nascimento = formatDate($cliente->data_de_nascimento);
+    $idade = calculateAge($cliente->data_de_nascimento);
     echo "<tr>
             <th>$cliente->nome</th>  
             <th>$cliente->telefone</th>  
-            <th>$cliente->data_de_nascimento</th>  
+            <th>$idade anos</th>  
             <th>$cliente->email</th>  
             <th>$cliente->cpf</th>  
           </tr>";
