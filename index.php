@@ -1,81 +1,49 @@
-<?php
-
-require('models/Cliente.php');
-
-$host = 'localhost:3306';
-$dbuser = 'root';
-$dbpassword = 'root';
-$dbname = 'visu_clientes';
-
-$conn = mysqli_connect($host, $dbuser, $dbpassword, $dbname);
-if ($conn) {
-    echo "Connection - successful </br>";
-    migrate($conn);
-} else {
-    echo "Connection - failed </br>" . mysqli_connect_error();
-}
-
-// Executa as migrations
-function migrate($conn)
-{
-    try {
-        // Salvando a query na variável
-        $create_clientes_table = file_get_contents("./migrations/001__create_clientes_table.sql");
-        mysqli_query($conn, "$create_clientes_table");
-    } catch (Exception $e) {
-        echo $e;
-    }
-}
-
-// Cadastrar novo cliente no banco de dados
-function create($conn, $nome, $telefone, $data_de_nascimento, $email, $cpf)
-{
-    $query = mysqli_prepare($conn, "INSERT INTO clientes (nome, telefone, data_de_nascimento, email, cpf) VALUES (?, ?, ?, ?, ?)");
-    $query->bind_param('sssss', $nome, $telefone, $data_de_nascimento, $email, $cpf);
-    return $query->execute();
-}
-
-// Busca todos os clientes no banco
-function getAll($conn)
-{
-    $array_clientes = [];
-    $result = mysqli_query($conn, "SELECT * FROM clientes");
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            $cliente = new Cliente($row['nome'], $row['telefone'], $row['data_de_nascimento'], $row['email'], $row['cpf']);
-            $array_clientes[] = $cliente;
-        }
-    }
-    return $array_clientes;
-}
-
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teste</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desafio técnico - AGP</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
-    <h1>Desafio técnico - AGP</h1>
-    <h2>Cadastrar novo cliente</h2>
-    <form action="" method="POST">
-        Nome
-        <input required type="text"><br>
-        Telefone
-        <input required type="text"><br>
-        Data de nascimento
-        <input required type="date"><br>
-        Email
-        <input type="email"><br>
-        CPF
-        <input type="text"><br>
-        <button>Criar</button>
-    </form>
+  <div class="d-flex align-items-center flex-column">
+    <h2 class="text-center my-3">Cadastrar novo cliente</h2>
+    <button class="btn btn-success mb-3"><a class="link-underline link-underline-opacity-0 link-light" href="lista-clientes.php">Ver lista de clientes</a></button>
+  </div>
+
+  <form class="form-control  form-control-sm d-flex flex-column gap-3 py-3" style="margin: 0 auto; max-width: 800px" action="lista-clientes.php" method="POST">
+
+    <div class="form-group">
+      <label class="form-label" for="nome">Nome <span class="text-danger">*</span></label>
+      <input required type="text" class="form-control" name="nome" id="nome">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="cpf">CPF</label>
+      <input type="number" class="form-control" name="cpf" id="cpf">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="telefone">Telefone <span class="text-danger">*</span></label>
+      <input required type="number" class="form-control" name="telefone" id="telefone">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="email">Email</label>
+      <input type="email" class="form-control" name="email" id="email">
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="data_de_nascimento">Data de Nascimento <span class="text-danger">*</span></label>
+      <input required type="date" class="date-input form-control" name="data_de_nascimento" id="data_de_nascimento">
+    </div>
+
+    <button class="btn btn-success" style="max-width: 100px; margin: 0 auto" type="submit" name="submit">Cadastrar</button>
+  </form>
 </body>
 
 </html>

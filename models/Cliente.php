@@ -11,7 +11,7 @@ class Cliente {
   {
     $this->nome = $nome;
     $this->telefone = $telefone;
-    $this->data_de_nasc = $data_de_nascimento;
+    $this->data_de_nascimento = $data_de_nascimento;
     $this->email = $email;
     $this->cpf = $cpf;
   }
@@ -26,6 +26,6 @@ class Cliente {
 
   public function __toString()
   {
-    return "CPF: $cpf | Nome: $nome | Telefone: $telefone | Data de nascimento: $data_de_nasc | Email: $email";
+    return "CPF: $this->cpf | Nome: $this->nome | Telefone: $this->telefone | Data de nascimento: $this->data_de_nascimento | Email: $this->email";
   }
 }
