@@ -10,6 +10,7 @@ function create($conn, $nome, $telefone, $data_de_nascimento, $email, $cpf)
     $query->execute();
 }
 
+// Deletar um cliente do banco de acordo com o número de telefone
 function deleteByNumber($conn, $telefone)
 {
     $query = mysqli_prepare($conn, "DELETE FROM clientes where telefone = ?");

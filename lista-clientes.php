@@ -4,17 +4,23 @@ require('db/queries.php');
 require('db/connection.php');
 require('utils/validation.php');
 
+// Variável para armazenar as possíveis mensagens de erro
 $error = "";
 
+// Se houve uma requisição $_POST para lista-clientes-php ele cria o novo cliente no banco
 if (isset($_POST['submit'])) {
   try {
     validateInputs($conn, $_POST['nome'], $_POST['data_de_nascimento'], $_POST['telefone'], $_POST['cpf']);
+    if (empty($_POST['cpf'])) {
+      $_POST['cpf'] = null;
+    }
     create($conn, $_POST['nome'], $_POST['telefone'], $_POST['data_de_nascimento'], $_POST['email'], $_POST['cpf']);
   } catch (Exception $e) {
     $error = $e->getMessage();
   }
 }
 
+// Quando uma requisição GET para lista-clientes.php é feita através do botão deletar faz a query no banco 
 if(isset($_GET['telefone'])) {
   try {
     deleteByNumber($conn, $_GET['telefone']);
@@ -23,8 +29,7 @@ if(isset($_GET['telefone'])) {
   }
 }
 
-
-
+// Formata o cpf 
 function formatCpf($cpf)
 {
   if (strlen($cpf) == 11) {
@@ -35,6 +40,7 @@ function formatCpf($cpf)
   return $cpf;
 }
 
+// Calcula a idade com base na data de nascimento
 function calculateAge($date)
 {
   $current = new DateTime("now");
@@ -43,8 +49,10 @@ function calculateAge($date)
   return $result->y;
 }
 
+// Busca todos os clientes no banco de dados
 $clientes = getAll($conn);
 
+// Função que cria a tabela  com os clientes
 function showClientes($clientes)
 {
 
@@ -84,7 +92,8 @@ function showClientes($clientes)
 </head>
 
 <body class="pb-5">
-  <script>    
+  <script>
+    // Envia um alerta caso tenha acontecido algum erro no cadastro    
     if (<?php echo (empty($error) ? 'false' : 'true') ?>) {
       window.alert("Aconteceu um erro no cadastro\n" + "<?php echo "$error" ?>");
     }
