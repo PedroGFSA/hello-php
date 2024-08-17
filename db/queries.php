@@ -7,7 +7,14 @@ function create($conn, $nome, $telefone, $data_de_nascimento, $email, $cpf)
 {
     $query = mysqli_prepare($conn, "INSERT INTO clientes (nome, telefone, data_de_nascimento, email, cpf) VALUES (?, ?, ?, ?, ?)");
     $query->bind_param('sssss', $nome, $telefone, $data_de_nascimento, $email, $cpf);
-    return $query->execute();
+    $query->execute();
+}
+
+function deleteByNumber($conn, $telefone)
+{
+    $query = mysqli_prepare($conn, "DELETE FROM clientes where telefone = ?");
+    $query->bind_param('s', $telefone);
+    $query->execute();
 }
 
 // Busca todos os clientes no banco

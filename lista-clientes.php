@@ -15,6 +15,16 @@ if (isset($_POST['submit'])) {
   }
 }
 
+if(isset($_GET['telefone'])) {
+  try {
+    deleteByNumber($conn, $_GET['telefone']);
+  } catch (Exception $e) {
+    $error = $e->getMessage();
+  }
+}
+
+
+
 function formatCpf($cpf)
 {
   if (strlen($cpf) == 11) {
@@ -43,7 +53,8 @@ function showClientes($clientes)
           <th>Telefone</th>  
           <th>Idade</th>  
           <th>Email</th>  
-          <th>CPF</th>  
+          <th>CPF</th>
+          <th></th>  
         </tr>";
   foreach ($clientes as $cliente) {
     $cpf = $cliente->cpf ? formatCpf($cliente->cpf) : '-';
@@ -54,7 +65,8 @@ function showClientes($clientes)
             <td>$cliente->telefone</td>  
             <td>$idade anos</td>  
             <td>$email</td>  
-            <td>$cpf</td>  
+            <td>$cpf</td>
+            <td class='text-center'><a class='btn btn-danger' href='lista-clientes.php?telefone=$cliente->telefone' name='delete'>Deletar</a></button</td>  
           </tr>";
   }
 }
@@ -72,9 +84,7 @@ function showClientes($clientes)
 </head>
 
 <body class="pb-5">
-  <script>
-    console.log("hello world");
-    
+  <script>    
     if (<?php echo (empty($error) ? 'false' : 'true') ?>) {
       window.alert("Aconteceu um erro no cadastro\n" + "<?php echo "$error" ?>");
     }
